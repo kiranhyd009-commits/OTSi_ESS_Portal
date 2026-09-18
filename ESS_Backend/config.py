@@ -29,10 +29,18 @@ class Config:
     # MFA feature flag
     MFA_ENABLED = os.getenv('MFA_ENABLED', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
     
-    # Office Location (Hyderabad HQ)
-    OFFICE_LAT = 17.4474
-    OFFICE_LNG = 78.3762
-    OFFICE_RADIUS_M = 300
+    # Office Location (OTSi Hyderabad HQ - Building H02, Phoenix Infocity SEZ)
+    OFFICE_LAT = float(os.getenv('OFFICE_LAT', '17.4418'))
+    OFFICE_LNG = float(os.getenv('OFFICE_LNG', '78.3809'))
+    OFFICE_RADIUS_M = int(os.getenv('OFFICE_RADIUS_M', '1500'))
+    # Metro radius (20km) allows office desktops/laptops on Ethernet/LAN with city-level ISP geolocation (17.3934, 78.4706)
+    OFFICE_METRO_RADIUS_M = int(os.getenv('OFFICE_METRO_RADIUS_M', '20000'))
+
+    # Supported OTSi Office Locations for Geofencing
+    OFFICE_LOCATIONS = [
+        {"name": "OTSi Hyderabad HQ (Phoenix Infocity SEZ H02)", "lat": 17.4418, "lng": 78.3809, "radius": 1500},
+        {"name": "OTSi Hyderabad (Campus 2 / HITEC City)", "lat": 17.4474, "lng": 78.3762, "radius": 1500},
+    ]
     
     # Working hours
     WORKING_HOURS_PER_DAY = 8.5

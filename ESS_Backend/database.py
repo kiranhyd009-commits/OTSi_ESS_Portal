@@ -122,14 +122,14 @@ class SupabaseDB:
     def count(table: str, filters: Optional[Dict] = None) -> int:
         """Count records"""
         try:
-            query = SupabaseDB.get_table(table).select("id", count="exact")
+            query = SupabaseDB.get_table(table).select("id", count="exact")  # type: ignore[arg-type]
             
             if filters:
                 for key, value in filters.items():
                     query = query.eq(key, value)
             
             response = query.execute()
-            return response.count
+            return int(response.count) if response.count is not None else 0
         except Exception as e:
             logger.error(f"Count error on {table}: {str(e)}")
             raise

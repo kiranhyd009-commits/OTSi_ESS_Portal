@@ -71,8 +71,9 @@ def ensure_admin_account(client: Client, password: str) -> None:
     if not existing.data:
         existing = client.table('employees').select('*').eq('email', EMAIL).execute()
 
-    if existing.data:
-        current_emp_id = existing.data[0]['employee_id']
+    if existing.data and isinstance(existing.data, list) and len(existing.data) > 0:
+        first_record = existing.data[0]
+        current_emp_id = first_record.get('employee_id', EMPLOYEE_ID) if isinstance(first_record, dict) else EMPLOYEE_ID
         client.table('employees').update(record).eq('employee_id', current_emp_id).execute()
         logger.info('Updated existing OTSI admin account')
     else:

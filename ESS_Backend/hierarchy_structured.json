@@ -1,0 +1,1031 @@
+[
+  {
+    "manager_id": "EMP1000",
+    "manager_name": "Executive Director",
+    "manager_designation": "Director - Operations",
+    "manager_department": "Operations",
+    "manager_role": "admin",
+    "total_reports": 10,
+    "reports": [
+      {
+        "employee_id": "EMP1003",
+        "full_name": "Neha Singh",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "SNA",
+        "status": "active",
+        "email": "neha.singh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1001",
+        "full_name": "Shweta Iyer",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Engineering",
+        "status": "active",
+        "email": "shweta.iyer@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1004",
+        "full_name": "Nisha Nath",
+        "role": "admin",
+        "designation": "HR Manager",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "nisha.nath@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1002",
+        "full_name": "Sonali Chauhan",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Engineering",
+        "status": "active",
+        "email": "sonali.chauhan@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1008",
+        "full_name": "Nitin Gupta",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Finance",
+        "status": "active",
+        "email": "nitin.gupta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1009",
+        "full_name": "Ravi Mukherjee",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Marketing",
+        "status": "active",
+        "email": "ravi.mukherjee@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1005",
+        "full_name": "Neha Pandey",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Administration",
+        "status": "active",
+        "email": "neha.pandey@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1006",
+        "full_name": "Deepak Nair",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Operations",
+        "status": "active",
+        "email": "deepak.nair@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1007",
+        "full_name": "Kriti Nath",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "D&A",
+        "status": "active",
+        "email": "kriti.nath@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1010",
+        "full_name": "Pooja Awasthi",
+        "role": "employee",
+        "designation": "Manager",
+        "department": "Engineering",
+        "status": "active",
+        "email": "pooja.awasthi@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1001",
+    "manager_name": "Shweta Iyer",
+    "manager_designation": "Manager",
+    "manager_department": "Engineering",
+    "manager_role": "employee",
+    "total_reports": 9,
+    "reports": [
+      {
+        "employee_id": "EMP1050",
+        "full_name": "Shweta Reddy",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "shweta.reddy@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1079",
+        "full_name": "Raj Iyer",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "raj.iyer@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1084",
+        "full_name": "Pooja Rao",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "pooja.rao@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1085",
+        "full_name": "Tarun Pandey",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "tarun.pandey@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1086",
+        "full_name": "Kiran Chowdhury",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "kiran.chowdhury@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP5831",
+        "full_name": "Ravi Mallem",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "ravi.mallem@otsi.co.in"
+      },
+      {
+        "employee_id": "EMP1093",
+        "full_name": "Amit Gupta",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "amit.gupta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1053",
+        "full_name": "Swati Nair",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "swati.nair@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1052",
+        "full_name": "Kiran Iyer",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "kiran.iyer@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1002",
+    "manager_name": "Sonali Chauhan",
+    "manager_designation": "Manager",
+    "manager_department": "Engineering",
+    "manager_role": "employee",
+    "total_reports": 9,
+    "reports": [
+      {
+        "employee_id": "EMP1045",
+        "full_name": "Tarun Singh",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "tarun.singh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1061",
+        "full_name": "Tarun Bose",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "tarun.bose2@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1070",
+        "full_name": "Suresh Nair",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "suresh.nair1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1071",
+        "full_name": "Amit Rajput",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "amit.rajput1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1073",
+        "full_name": "Nitin Gupta",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "nitin.gupta2@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1083",
+        "full_name": "Kavya Patel",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "kavya.patel@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1096",
+        "full_name": "Anjali Verma",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "anjali.verma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1100",
+        "full_name": "Varun Chowdhury",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "varun.chowdhury@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1032",
+        "full_name": "Nitin Gupta",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "nitin.gupta1@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1003",
+    "manager_name": "Neha Singh",
+    "manager_designation": "Manager",
+    "manager_department": "SNA",
+    "manager_role": "employee",
+    "total_reports": 9,
+    "reports": [
+      {
+        "employee_id": "EMP1041",
+        "full_name": "Amit Rajput",
+        "role": "employee",
+        "designation": "Server Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "amit.rajput@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1038",
+        "full_name": "Nitin Yadav",
+        "role": "employee",
+        "designation": "Server Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "nitin.yadav@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1058",
+        "full_name": "Ravi Gupta",
+        "role": "employee",
+        "designation": "Server Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "ravi.gupta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1051",
+        "full_name": "Kavya Mukherjee",
+        "role": "employee",
+        "designation": "System Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "kavya.mukherjee@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1065",
+        "full_name": "Varun Sharma",
+        "role": "employee",
+        "designation": "System Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "varun.sharma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1082",
+        "full_name": "Neha Dixit",
+        "role": "employee",
+        "designation": "Director - IT Infrastructure & Cloud",
+        "department": "SNA",
+        "status": "active",
+        "email": "neha.dixit@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1081",
+        "full_name": "Varun Mehta",
+        "role": "employee",
+        "designation": "System Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "varun.mehta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1033",
+        "full_name": "Kriti Sharma",
+        "role": "employee",
+        "designation": "System Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "kriti.sharma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1055",
+        "full_name": "Sanjay Rao",
+        "role": "employee",
+        "designation": "System Administrator",
+        "department": "SNA",
+        "status": "active",
+        "email": "sanjay.rao@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1004",
+    "manager_name": "Nisha Nath",
+    "manager_designation": "HR Manager",
+    "manager_department": "Human Resources",
+    "manager_role": "admin",
+    "total_reports": 19,
+    "reports": [
+      {
+        "employee_id": "EMP1012",
+        "full_name": "Suresh Nair",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "suresh.nair@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1022",
+        "full_name": "Tarun Bose",
+        "role": "hr",
+        "designation": "Senior Specialist HRBP",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "tarun.bose1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1023",
+        "full_name": "Rahul Tiwari",
+        "role": "hr",
+        "designation": "Senior Specialist HRBP",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "rahul.tiwari@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1019",
+        "full_name": "Tarun Bose",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "tarun.bose@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1020",
+        "full_name": "Divya Dixit",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "divya.dixit@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1024",
+        "full_name": "Amit Bose",
+        "role": "hr",
+        "designation": "Senior Specialist HRBP",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "amit.bose@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1018",
+        "full_name": "Nisha Reddy",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "nisha.reddy@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1016",
+        "full_name": "Sonali Jain",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "sonali.jain@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1013",
+        "full_name": "Vikram Singh",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "vikram.singh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1011",
+        "full_name": "Pooja Awasthi",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "pooja.awasthi1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1014",
+        "full_name": "Kriti Jain",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "kriti.jain@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1015",
+        "full_name": "Rahul Mukherjee",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "rahul.mukherjee@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1017",
+        "full_name": "Kavya Sharma",
+        "role": "hr",
+        "designation": "Technical Recruiter",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "kavya.sharma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1021",
+        "full_name": "Manoj Yadav",
+        "role": "hr",
+        "designation": "Senior Specialist HRBP",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "manoj.yadav@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1025",
+        "full_name": "Tarun Nath",
+        "role": "hr",
+        "designation": "Associate Manager- HR",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "tarun.nath@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1026",
+        "full_name": "Shweta Menon",
+        "role": "hr",
+        "designation": "Associate Manager- HR",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "shweta.menon@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1027",
+        "full_name": "Ritu Mehta",
+        "role": "hr",
+        "designation": "Associate Manager- HR",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "ritu.mehta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1028",
+        "full_name": "Pooja Mukherjee",
+        "role": "hr",
+        "designation": "Associate Manager- HR",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "pooja.mukherjee@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1029",
+        "full_name": "Sonali Dixit",
+        "role": "hr",
+        "designation": "Associate Manager- HR",
+        "department": "Human Resources",
+        "status": "active",
+        "email": "sonali.dixit@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1005",
+    "manager_name": "Neha Pandey",
+    "manager_designation": "Manager",
+    "manager_department": "Administration",
+    "manager_role": "employee",
+    "total_reports": 2,
+    "reports": [
+      {
+        "employee_id": "EMP1080",
+        "full_name": "Sneha Sharma",
+        "role": "admin",
+        "designation": "Admin Executive",
+        "department": "Administration",
+        "status": "active",
+        "email": "sneha.sharma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1078",
+        "full_name": "Suresh Reddy",
+        "role": "admin",
+        "designation": "Admin Executive",
+        "department": "Administration",
+        "status": "active",
+        "email": "suresh.reddy@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1006",
+    "manager_name": "Deepak Nair",
+    "manager_designation": "Manager",
+    "manager_department": "Operations",
+    "manager_role": "employee",
+    "total_reports": 11,
+    "reports": [
+      {
+        "employee_id": "EMP1075",
+        "full_name": "Divya Rao",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "divya.rao@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1036",
+        "full_name": "Gaurav Kumar",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "gaurav.kumar@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1042",
+        "full_name": "Kriti Desai",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "kriti.desai@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1060",
+        "full_name": "Aarti Mishra",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "aarti.mishra@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1059",
+        "full_name": "Neha Chowdhury",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "neha.chowdhury@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1043",
+        "full_name": "Aarti Tiwari",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "aarti.tiwari@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1062",
+        "full_name": "Pooja Yadav",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "pooja.yadav1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1064",
+        "full_name": "Varun Verma",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "varun.verma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1069",
+        "full_name": "Megha Bose",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "megha.bose@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1088",
+        "full_name": "Vikram Mishra",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "vikram.mishra@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1054",
+        "full_name": "Swati Menon",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Operations",
+        "status": "active",
+        "email": "swati.menon@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1007",
+    "manager_name": "Kriti Nath",
+    "manager_designation": "Manager",
+    "manager_department": "D&A",
+    "manager_role": "employee",
+    "total_reports": 7,
+    "reports": [
+      {
+        "employee_id": "EMP1035",
+        "full_name": "Kriti Jain",
+        "role": "employee",
+        "designation": "Data Scientist",
+        "department": "D&A",
+        "status": "active",
+        "email": "kriti.jain1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1034",
+        "full_name": "Pooja Mehta",
+        "role": "employee",
+        "designation": "Data Scientist",
+        "department": "D&A",
+        "status": "active",
+        "email": "pooja.mehta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1039",
+        "full_name": "Sneha Jain",
+        "role": "employee",
+        "designation": "Data Scientist",
+        "department": "D&A",
+        "status": "active",
+        "email": "sneha.jain@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1074",
+        "full_name": "Sonali Verma",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "D&A",
+        "status": "active",
+        "email": "sonali.verma@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1077",
+        "full_name": "Nisha Reddy",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "D&A",
+        "status": "active",
+        "email": "nisha.reddy1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1089",
+        "full_name": "Nisha Tiwari",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "D&A",
+        "status": "active",
+        "email": "nisha.tiwari@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1098",
+        "full_name": "Ravi Mukherjee",
+        "role": "employee",
+        "designation": "Data Analyst",
+        "department": "D&A",
+        "status": "active",
+        "email": "ravi.mukherjee1@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1008",
+    "manager_name": "Nitin Gupta",
+    "manager_designation": "Manager",
+    "manager_department": "Finance",
+    "manager_role": "employee",
+    "total_reports": 5,
+    "reports": [
+      {
+        "employee_id": "EMP1047",
+        "full_name": "Pooja Nath",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Finance",
+        "status": "active",
+        "email": "pooja.nath@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1044",
+        "full_name": "Varun Singh",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Finance",
+        "status": "active",
+        "email": "varun.singh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1063",
+        "full_name": "Divya Bhatt",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Finance",
+        "status": "active",
+        "email": "divya.bhatt@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1095",
+        "full_name": "Sonali Bhatt",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Finance",
+        "status": "active",
+        "email": "sonali.bhatt@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1031",
+        "full_name": "Sanjay Mukherjee",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Finance",
+        "status": "active",
+        "email": "sanjay.mukherjee@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1009",
+    "manager_name": "Ravi Mukherjee",
+    "manager_designation": "Manager",
+    "manager_department": "Marketing",
+    "manager_role": "employee",
+    "total_reports": 9,
+    "reports": [
+      {
+        "employee_id": "EMP1048",
+        "full_name": "Manoj Chowdhury",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "manoj.chowdhury@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1037",
+        "full_name": "Suresh Rajput",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "suresh.rajput@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1067",
+        "full_name": "Varun Nair",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "varun.nair@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1090",
+        "full_name": "Kriti Desai",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "kriti.desai1@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1097",
+        "full_name": "Sonali Rao",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "sonali.rao@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1091",
+        "full_name": "Nitin Gupta",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "nitin.gupta3@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1092",
+        "full_name": "Divya Singh",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "divya.singh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1094",
+        "full_name": "Manoj Mehta",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "manoj.mehta@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1057",
+        "full_name": "Ritu Sharma",
+        "role": "employee",
+        "designation": "Associate",
+        "department": "Marketing",
+        "status": "active",
+        "email": "ritu.sharma@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1010",
+    "manager_name": "Pooja Awasthi",
+    "manager_designation": "Manager",
+    "manager_department": "Engineering",
+    "manager_role": "employee",
+    "total_reports": 10,
+    "reports": [
+      {
+        "employee_id": "EMP1046",
+        "full_name": "Pooja Yadav",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "pooja.yadav@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1040",
+        "full_name": "Shweta Pandey",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "shweta.pandey@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1068",
+        "full_name": "Arun Jain",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "arun.jain@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1076",
+        "full_name": "Nisha Bhatt",
+        "role": "employee",
+        "designation": "Senior Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "nisha.bhatt@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1072",
+        "full_name": "Gaurav Bose",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "gaurav.bose@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1066",
+        "full_name": "Pooja Kumar",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "pooja.kumar@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1049",
+        "full_name": "Manoj Kumar",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "manoj.kumar@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1099",
+        "full_name": "Swati Nath",
+        "role": "employee",
+        "designation": "Software Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "swati.nath@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1087",
+        "full_name": "Nisha Ghosh",
+        "role": "employee",
+        "designation": "Graduate Engineer",
+        "department": "Engineering",
+        "status": "active",
+        "email": "nisha.ghosh@otsi-usa.com"
+      },
+      {
+        "employee_id": "EMP1056",
+        "full_name": "Kriti Reddy",
+        "role": "employee",
+        "designation": "QA Analyst",
+        "department": "Engineering",
+        "status": "active",
+        "email": "kriti.reddy@otsi-usa.com"
+      }
+    ]
+  },
+  {
+    "manager_id": "EMP1022",
+    "manager_name": "Tarun Bose",
+    "manager_designation": "Senior Specialist HRBP",
+    "manager_department": "Human Resources",
+    "manager_role": "hr",
+    "total_reports": 1,
+    "reports": [
+      {
+        "employee_id": "EMP9999",
+        "full_name": "Ravi Mallemala",
+        "role": "employee",
+        "designation": null,
+        "department": null,
+        "status": "active",
+        "email": "ravi.mallemala@otsi.co.in"
+      }
+    ]
+  }
+]

@@ -37,7 +37,7 @@ FLASK_ENV = os.getenv('FLASK_ENV', 'development')
 app.config.from_object(config_by_name.get(FLASK_ENV, 'development'))
 
 # Enable CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # type: ignore[arg-type]
 
 # ═════════════════════════════════════════════════════════════
 # HEALTH CHECK
@@ -937,20 +937,22 @@ def reset_password():
             # Verify that password wasn't already changed after this token was issued
             if employee.get('password_changed_at'):
                 pwd_changed_val = employee.get('password_changed_at')
+                pwd_changed: datetime | None = None
                 if isinstance(pwd_changed_val, str):
                     pwd_changed = datetime.fromisoformat(pwd_changed_val.replace('Z', '+00:00'))
-                else:
+                elif isinstance(pwd_changed_val, datetime):
                     pwd_changed = pwd_changed_val
                 
-                if pwd_changed.tzinfo is None:
-                    pwd_changed = pwd_changed.replace(tzinfo=timezone.utc)
-                else:
-                    pwd_changed = pwd_changed.astimezone(timezone.utc)
+                if pwd_changed is not None:
+                    if pwd_changed.tzinfo is None:
+                        pwd_changed = pwd_changed.replace(tzinfo=timezone.utc)
+                    else:
+                        pwd_changed = pwd_changed.astimezone(timezone.utc)
 
-                # Token iat is Unix timestamp. Convert to timezone-aware UTC datetime.
-                token_issued = datetime.fromtimestamp(payload.get('iat', 0), timezone.utc)
-                if pwd_changed > token_issued:
-                    return jsonify({'error': 'This reset link has already been used.'}), 400
+                    # Token iat is Unix timestamp. Convert to timezone-aware UTC datetime.
+                    token_issued = datetime.fromtimestamp(payload.get('iat', 0), timezone.utc)
+                    if pwd_changed > token_issued:
+                        return jsonify({'error': 'This reset link has already been used.'}), 400
         except Exception as e:
             return jsonify({'error': 'Invalid or expired reset token'}), 400
 
@@ -1029,13 +1031,26 @@ def check_in():
         
         if not is_wfh and latitude and longitude:
             from config import Config
+            office_locs = getattr(Config, 'OFFICE_LOCATIONS', None)
             is_allowed = LocationUtils.is_within_office(
                 latitude, longitude,
                 Config.OFFICE_LAT, Config.OFFICE_LNG,
-                Config.OFFICE_RADIUS_M
+                Config.OFFICE_RADIUS_M,
+                office_locations=office_locs,
+                metro_radius_m=getattr(Config, 'OFFICE_METRO_RADIUS_M', 20000)
             )
             if not is_allowed:
-                return jsonify({'error': 'Check-in denied: You are outside the OTSi office geofence.'}), 403
+                min_dist = float('inf')
+                locs_to_check = office_locs if office_locs else [{'lat': Config.OFFICE_LAT, 'lng': Config.OFFICE_LNG}]
+                for loc in locs_to_check:
+                    d = LocationUtils.calculate_distance(latitude, longitude, loc['lat'], loc['lng'])
+                    if d < min_dist:
+                        min_dist = d
+                km = round(min_dist / 1000.0, 1)
+                return jsonify({
+                    'error': f'Check-in denied: You are outside the OTSi office geofence ({km} km away). Connect to office Wi-Fi, disable VPN, or enable WFH mode.',
+                    'distance_km': km
+                }), 403
             location_verified = True
             location_info = f"{latitude},{longitude}"
         elif not is_wfh and not latitude:
@@ -1114,6 +1129,35 @@ def check_out():
         today = date.today()
         check_out_time = datetime.now(timezone.utc)
         
+        data = request.get_json(silent=True) or {}
+        is_wfh = data.get('is_wfh', False)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+
+        # Verify location if not WFH
+        if not is_wfh and latitude and longitude:
+            from config import Config
+            office_locs = getattr(Config, 'OFFICE_LOCATIONS', None)
+            is_allowed = LocationUtils.is_within_office(
+                latitude, longitude,
+                Config.OFFICE_LAT, Config.OFFICE_LNG,
+                Config.OFFICE_RADIUS_M,
+                office_locations=office_locs,
+                metro_radius_m=getattr(Config, 'OFFICE_METRO_RADIUS_M', 20000)
+            )
+            if not is_allowed:
+                min_dist = float('inf')
+                locs_to_check = office_locs if office_locs else [{'lat': Config.OFFICE_LAT, 'lng': Config.OFFICE_LNG}]
+                for loc in locs_to_check:
+                    d = LocationUtils.calculate_distance(latitude, longitude, loc['lat'], loc['lng'])
+                    if d < min_dist:
+                        min_dist = d
+                km = round(min_dist / 1000.0, 1)
+                return jsonify({
+                    'error': f'Check-out denied: You are outside office premises ({km} km away). Please enable WFH mode to check out remotely.',
+                    'distance_km': km
+                }), 403
+        
         # Get today's attendance record
         record = SupabaseDB.select_one('attendance_logs', {
             'employee_id': employee_id,
@@ -1127,10 +1171,13 @@ def check_out():
         check_in = datetime.fromisoformat(record['check_in_time'])
         working_hours = AttendanceUtils.calculate_working_hours(check_in, check_out_time)
         
-        # Apply 8-hour minimum rule for full day
+        # Apply 7-hour minimum rule for full day
         new_status = record['status']
         if working_hours < 7.0 and new_status not in ['absent']:
             new_status = 'half_day'
+        elif not is_wfh and new_status == 'wfh':
+            # Checked in WFH, but checked out from Office premises -> Hybrid day, marked present
+            new_status = 'present'
             
         # Update record
         SupabaseDB.update('attendance_logs',
@@ -1143,10 +1190,11 @@ def check_out():
         
         # Create notification (convert UTC to IST = UTC + 5:30)
         ist_check_out = check_out_time + timedelta(hours=5, minutes=30)
+        mode_label = 'WFH' if is_wfh else 'Office'
         NotificationUtils.create_notification(
             employee_id,
             'Check Out Successful',
-            f'Checked out at {ist_check_out.strftime("%I:%M %p")} IST - Worked {working_hours:.2f} hours',
+            f'Checked out at {ist_check_out.strftime("%I:%M %p")} IST ({mode_label}) - Worked {working_hours:.2f} hours',
             'checkout',
             action_url='att'
         )
@@ -1156,7 +1204,9 @@ def check_out():
         return jsonify({
             'message': 'Checked out successfully',
             'check_out_time': check_out_time.isoformat(),
-            'working_hours': working_hours
+            'working_hours': working_hours,
+            'is_wfh': is_wfh,
+            'status': new_status
         }), 200
         
     except Exception as e:
@@ -1192,7 +1242,8 @@ def get_today_attendance():
             'check_out_time': record['check_out_time'],
             'working_hours': record['working_hours'],
             'is_wfh': record['is_wfh'],
-            'is_late': record['is_late']
+            'is_late': record['is_late'],
+            'check_in_location': record.get('check_in_location')
         }), 200
         
     except Exception as e:

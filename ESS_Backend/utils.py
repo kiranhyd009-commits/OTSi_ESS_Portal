@@ -32,10 +32,24 @@ class LocationUtils:
     
     @staticmethod
     def is_within_office(latitude: float, longitude: float, office_lat: float, 
-                        office_lng: float, radius_m: float) -> bool:
-        """Check if coordinates are within office geofence"""
-        distance = LocationUtils.calculate_distance(latitude, longitude, office_lat, office_lng)
-        return distance <= radius_m
+                        office_lng: float, radius_m: float, office_locations: list = None,
+                        metro_radius_m: float = 20000) -> bool:
+        """Check if coordinates are within any office geofence or city metro ISP network radius"""
+        # 1. Strict campus radius check
+        if office_locations:
+            for loc in office_locations:
+                d = LocationUtils.calculate_distance(latitude, longitude, loc['lat'], loc['lng'])
+                if d <= loc.get('radius', radius_m):
+                    return True
+        else:
+            distance = LocationUtils.calculate_distance(latitude, longitude, office_lat, office_lng)
+            if distance <= radius_m:
+                return True
+
+        # 2. Metro network check: allows office desktop PCs / Ethernet with city-level ISP geolocation (e.g. Hyderabad centroid ~10.9km)
+        locs = office_locations if office_locations else [{'lat': office_lat, 'lng': office_lng}]
+        min_dist = min(LocationUtils.calculate_distance(latitude, longitude, loc['lat'], loc['lng']) for loc in locs)
+        return min_dist <= metro_radius_m
 
 
 class AttendanceUtils:

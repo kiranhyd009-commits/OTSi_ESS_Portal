@@ -1,4 +1,7 @@
 {
-  "venvPath": "d:\\OTSi_ESS_Portal\\ESS_Backend",
-  "venv": "venv"
+  "venvPath": "ESS_Backend",
+  "venv": "venv",
+  "extraPaths": [
+    "ESS_Backend"
+  ]
 }
