@@ -32,7 +32,7 @@ class LocationUtils:
     
     @staticmethod
     def is_within_office(latitude: float, longitude: float, office_lat: float, 
-                        office_lng: float, radius_m: float, office_locations: list = None,
+                        office_lng: float, radius_m: float, office_locations: list | None = None,
                         metro_radius_m: float = 20000) -> bool:
         """Check if coordinates are within any office geofence or city metro ISP network radius"""
         # 1. Strict campus radius check
@@ -270,12 +270,15 @@ class LeaveUtils:
         'casual': 'casual_leave',
         'casual_leave': 'casual_leave',
         'casual leave': 'casual_leave',
+        'csl': 'casual_leave',
+        'casual, sick leave': 'casual_leave',
         'sick': 'sick_leave',
         'sick_leave': 'sick_leave',
         'sick leave': 'sick_leave',
         'earned': 'earned_leave',
         'earned_leave': 'earned_leave',
         'earned leave': 'earned_leave',
+        'el': 'earned_leave',
         'bereavement': 'bereavement_leave',
         'bereavement_leave': 'bereavement_leave',
         'bereavement leave': 'bereavement_leave',

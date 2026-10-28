@@ -3,7 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#04466c">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>OTSi ESS Portal — Object Technology Solutions Inc.</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
@@ -3988,6 +3992,537 @@
         grid-template-columns: 1fr;
       }
     }
+    /* ─── REPORTING & ORG HIERARCHY ALIGNMENT & TREE RENDERER ─── */
+    .org-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .org-view-toggle {
+      display: flex;
+      background: #F1F5F9;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid #E2E8F0;
+      gap: 2px;
+    }
+
+    .org-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--slate);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .org-toggle-btn.active {
+      background: #ffffff;
+      color: var(--otsi-navy);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .org-toggle-btn:hover:not(.active) {
+      color: var(--otsi-blue);
+    }
+
+    /* Vertical Chain Alignment Fix */
+    .org-chain-list {
+      position: relative;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .org-chain-rail {
+      position: absolute;
+      left: 28px;
+      top: 24px;
+      bottom: 24px;
+      width: 2px;
+      background: #CBD5E1;
+      z-index: 1;
+    }
+
+    .org-chain-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .org-chain-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .org-chain-item.active-user {
+      background: #EFF6FF;
+      border: 1.5px solid var(--otsi-blue);
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.1);
+    }
+
+    .org-chain-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      flex-shrink: 0;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+    }
+
+    /* Hierarchical CSS Tree Renderer (Multi-level Tree Chart) */
+    .org-tree-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      padding: 24px 16px;
+      background: #F8FAFC;
+      border-radius: 12px;
+      border: 1px solid #E2E8F0;
+      text-align: center;
+      position: relative;
+    }
+
+    .org-tree {
+      display: inline-block;
+      white-space: nowrap;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .org-tree ul {
+      padding-top: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      list-style: none;
+    }
+
+    .org-tree li {
+      float: left;
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 20px 8px 0 8px;
+      transition: all 0.3s ease;
+    }
+
+    /* Horizontal branch rails and vertical drop lines */
+    .org-tree li::before, .org-tree li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 2px solid #CBD5E1;
+      width: 50%;
+      height: 20px;
+    }
+
+    .org-tree li::after {
+      right: auto;
+      left: 50%;
+      border-left: 2px solid #CBD5E1;
+    }
+
+    .org-tree li:only-child::after, .org-tree li:only-child::before {
+      display: none;
+    }
+
+    .org-tree li:only-child {
+      padding-top: 0;
+    }
+
+    .org-tree li:first-child::before, .org-tree li:last-child::after {
+      border: 0 none;
+    }
+
+    .org-tree li:last-child::before {
+      border-right: 2px solid #CBD5E1;
+      border-radius: 0 8px 0 0;
+    }
+
+    .org-tree li:first-child::after {
+      border-radius: 8px 0 0 0;
+    }
+
+    /* Vertical line down from parent card to children sub-ul */
+    .org-tree ul ul::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 2px solid #CBD5E1;
+      width: 0;
+      height: 20px;
+      transform: translateX(-50%);
+    }
+
+    /* Node card styling matching Image 2 */
+    .org-tree-node {
+      border: 1.5px solid #E2E8F0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: inline-block;
+      background: #ffffff;
+      min-width: 135px;
+      max-width: 180px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .org-tree-node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+      border-color: var(--otsi-blue);
+    }
+
+    .org-tree-node.me {
+      border-color: var(--otsi-blue);
+      background: #EFF6FF;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .org-tree-node.highlight {
+      border-color: #F59E0B;
+      background: #FEF3C7;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .org-node-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      margin: 0 auto 6px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12.5px;
+    }
+
+    .org-node-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--otsi-navy);
+      line-height: 1.2;
+    }
+
+    .org-node-role {
+      font-size: 10px;
+      color: var(--slate);
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+
+    .org-node-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 6px;
+      padding: 2px 8px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .org-node-badge:hover {
+      background: var(--otsi-blue);
+      color: #ffffff;
+      border-color: var(--otsi-blue);
+    }
+
+    .org-tree-collapsed > ul {
+      display: none !important;
+    }
+
+    /* ═════════════════════════════════════════════════════════════
+       OTSI ESS PORTAL - MASTER MOBILE & TOUCH RESPONSIVE SUITE
+       Ensures 100% Mobile Compatibility (320px - 768px screens)
+       ═════════════════════════════════════════════════════════════ */
+
+    /* Global Mobile Touch Optimizations */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      touch-action: manipulation;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Safe Area Inset Support for Modern iOS / Android Devices */
+    .app-header {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    .bottom-nav {
+      padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    .main-scroll {
+      padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+      min-height: calc(100vh - 56px);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Tablet & Medium Screen Adaptations (<= 768px) */
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 14px;
+      }
+
+      .leave-top-row {
+        grid-template-columns: 1fr;
+      }
+
+      .leave-quick-nav-top {
+        width: 100%;
+      }
+
+      .quick-nav-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .leave-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .perm-grid-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .ts-emp-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Small Screen / Smartphone Adaptations (<= 480px) */
+    @media (max-width: 480px) {
+      .page-pad {
+        padding: 12px 10px;
+      }
+
+      /* Header adjustments */
+      .header-content {
+        padding: 0 10px;
+      }
+
+      .header-brand {
+        font-size: 13.5px;
+      }
+
+      .header-logo-box img {
+        height: 24px !important;
+      }
+
+      /* Leave Dashboard Header & Cards */
+      .leave-header-banner {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 12px;
+        gap: 10px;
+        border-radius: 10px;
+      }
+
+      .leave-header-title {
+        font-size: 17px;
+      }
+
+      .leave-header-sub {
+        font-size: 11.5px;
+      }
+
+      .btn-apply-leave-modern {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 14px;
+        font-size: 13.5px;
+      }
+
+      /* 2-Column Balance Cards for Mobile Thumb Readability */
+      .leave-cards-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px;
+      }
+
+      .leave-stat-card {
+        padding: 10px 10px;
+      }
+
+      .leave-stat-num {
+        font-size: 24px;
+      }
+
+      .leave-stat-label {
+        font-size: 11px;
+      }
+
+      .leave-stat-sub {
+        font-size: 9.5px;
+      }
+
+      /* Quick Navigation Grid on Mobile */
+      .quick-nav-list {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px;
+      }
+
+      .quick-nav-btn {
+        padding: 8px 10px;
+      }
+
+      /* Permissions Widget Box */
+      .perm-grid-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px;
+      }
+
+      .perm-item-box {
+        padding: 8px;
+      }
+
+      .perm-item-val {
+        font-size: 16px;
+      }
+
+      /* All Mobile Tables: Smooth Touch Scroll Container */
+      .modern-table-card,
+      #leave-table-view-container,
+      .ts-table-wrap,
+      #holiday-table-india,
+      #holiday-table-us {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 10px;
+      }
+
+      .leave-table th, 
+      .leave-table td {
+        padding: 9px 8px;
+        font-size: 11.5px;
+        white-space: nowrap;
+      }
+
+      /* Timesheet Mobile Layout */
+      .week-nav {
+        padding: 8px 10px;
+      }
+
+      .week-label {
+        font-size: 12px;
+      }
+
+      .ts-header-card {
+        padding: 12px 10px;
+      }
+
+      /* Helpdesk Mobile Stepper & Tickets */
+      .hd-t-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .hd-t-meta {
+        font-size: 11.5px;
+      }
+
+      /* Modals on Mobile: Full-screen Sheet Comfort */
+      .modal-overlay {
+        padding: 8px !important;
+        align-items: flex-end; /* Bottom sheet style on mobile */
+      }
+
+      .modal-sheet {
+        max-width: 100% !important;
+        width: 100% !important;
+        max-height: 92vh !important;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        padding: 16px 14px;
+      }
+
+      .modal-title {
+        font-size: 16px;
+      }
+
+      .modal-footer {
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+
+      .modal-footer button {
+        width: 100%;
+        height: 44px; /* Touch target guideline */
+      }
+
+      /* Bottom Nav Bar Touch Target Enhancement */
+      .bnav-item {
+        padding: 8px 2px 6px;
+      }
+
+      .bnav-item span {
+        font-size: 9.5px;
+      }
+
+      .bnav-item svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .bnav-main-circle {
+        width: 48px;
+        height: 48px;
+        top: -16px;
+      }
+
+      .bnav-main-circle svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
   </style>
 </head>
 
@@ -5334,63 +5869,45 @@
           </div>
           <!-- Organization Reporting Hierarchy Visual Card -->
           <div style="padding: 0 14px 14px;">
-            <div class="sec-label" style="padding:0; margin-bottom:10px;">Reporting & Org Hierarchy</div>
-            <div
-              style="background:#ffffff; border-radius:12px; padding:16px; border:1.5px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,0.02);">
-              <div style="display:flex; flex-direction:column; gap:10px;">
-
-                <!-- Level 1: Leadership / Department Head -->
-                <div
-                  style="display:flex; align-items:center; gap:10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:8px 12px;">
-                  <div
-                    style="width:32px; height:32px; border-radius:8px; background:#E0F2FE; color:var(--otsi-blue); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;">
-                    VP</div>
-                  <div style="flex:1;">
-                    <div style="font-size:12px; font-weight:700; color:var(--otsi-navy);">Chandra Mullapudi</div>
-                    <div style="font-size:10.5px; color:var(--slate);">President & Global Delivery Head</div>
-                  </div>
-                  <span
-                    style="font-size:10px; font-weight:700; background:#F1F5F9; color:var(--slate); padding:2px 6px; border-radius:4px;">Executive</span>
-                </div>
-
-                <!-- Connector Line -->
-                <div style="width:2px; height:10px; background:#CBD5E1; margin-left:26px;"></div>
-
-                <!-- Level 2: Direct Reporting Manager -->
-                <div
-                  style="display:flex; align-items:center; gap:10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:8px 12px;">
-                  <div
-                    style="width:32px; height:32px; border-radius:8px; background:#DCFCE7; color:#16A34A; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;">
-                    KM</div>
-                  <div style="flex:1;">
-                    <div style="font-size:12px; font-weight:700; color:var(--otsi-navy);" id="org-tree-mgr-name">Kiran
-                      Mullapudi</div>
-                    <div style="font-size:10.5px; color:var(--slate);">Delivery Manager · Direct Lead</div>
-                  </div>
-                  <span
-                    style="font-size:10px; font-weight:700; background:#DCFCE7; color:#166534; padding:2px 6px; border-radius:4px;">Manager</span>
-                </div>
-
-                <!-- Connector Line -->
-                <div style="width:2px; height:10px; background:#CBD5E1; margin-left:26px;"></div>
-
-                <!-- Level 3: Current User (You) -->
-                <div
-                  style="display:flex; align-items:center; gap:10px; background:#EFF6FF; border:1.5px solid var(--otsi-blue); border-radius:8px; padding:8px 12px;">
-                  <div
-                    style="width:32px; height:32px; border-radius:8px; background:var(--otsi-blue); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;"
-                    id="org-tree-user-initials">--</div>
-                  <div style="flex:1;">
-                    <div style="font-size:12px; font-weight:800; color:var(--otsi-navy);" id="org-tree-user-name">--
-                      (You)</div>
-                    <div style="font-size:10.5px; color:var(--otsi-blue);" id="org-tree-user-role">Software Engineer
-                    </div>
-                  </div>
-                  <span
-                    style="font-size:10px; font-weight:700; background:#04466C; color:#ffffff; padding:2px 6px; border-radius:4px;">Active</span>
-                </div>
-
+            <div class="org-card-header">
+              <div class="sec-label" style="padding:0; margin:0;">Reporting & Org Hierarchy</div>
+              <div class="org-view-toggle">
+                <button class="org-toggle-btn active" id="btn-org-chain" onclick="switchOrgView('chain')">
+                  <i class="fas fa-bars-staggered"></i> Chain View
+                </button>
+                <button class="org-toggle-btn" id="btn-org-tree" onclick="switchOrgView('tree')">
+                  <i class="fas fa-sitemap"></i> Tree Chart
+                </button>
+                <button class="org-toggle-btn" onclick="openOrgTreeModal()" title="Open full screen tree modal">
+                  <i class="fas fa-expand"></i> Full Screen
+                </button>
               </div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:12px; padding:16px; border:1.5px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,0.02);">
+              
+              <!-- VIEW 1: Vertically Aligned Reporting Chain -->
+              <div id="org-view-chain" class="org-chain-list">
+                <!-- Seamless Vertical Guide Rail -->
+                <div class="org-chain-rail"></div>
+                <div style="padding:16px; text-align:center; color:var(--slate); font-size:12px;" id="org-chain-placeholder">
+                  <i class="fas fa-spinner fa-spin" style="color:var(--otsi-blue); margin-right:6px;"></i> Loading reporting hierarchy...
+                </div>
+              </div>
+
+              <!-- VIEW 2: Hierarchical CSS Tree Renderer (Horizontal rails & vertical drop lines matching Image 2) -->
+              <div id="org-view-tree" class="org-tree-wrapper" style="display:none;">
+                <div style="font-size:11px; color:var(--slate); margin-bottom:12px; font-weight:600; text-align:left; display:flex; justify-content:space-between; align-items:center;">
+                  <span><i class="fas fa-sitemap" style="color:var(--otsi-blue);"></i> Interactive Organization Tree</span>
+                  <button class="btn-main" onclick="openOrgTreeModal()" style="margin:0; padding:4px 10px; font-size:10.5px; width:auto; border-radius:6px;">
+                    <i class="fas fa-expand-alt"></i> Full View
+                  </button>
+                </div>
+                <div class="org-tree" id="card-org-tree-root">
+                  <!-- Dynamically rendered tree -->
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -5711,6 +6228,47 @@
           <div class="log-list" id="monthly-attendance-list">
             <div style="padding:20px;text-align:center;color:var(--slate-light)">Loading monthly attendance...</div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ FULL SCREEN INTERACTIVE ORG CHART MODAL (REFERENCE IMAGE 2) ════ -->
+  <div class="modal-overlay" id="org-tree-modal">
+    <div class="modal-sheet" style="max-width: 95vw; width: 1100px; height: 88vh; max-height: 800px; display: flex; flex-direction: column;">
+      <div class="modal-header" style="background: #ffffff; border-bottom: 1px solid #E2E8F0; padding: 14px 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: #E0F2FE; color: var(--otsi-blue); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: 0.5px;">COMPANY</div>
+            <div class="modal-header-title" style="font-size: 16px;">Org Chart</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeOrgTreeModal()" aria-label="Close">&#x2715;</button>
+      </div>
+      
+      <!-- Controls Strip matching Image 2 -->
+      <div style="background: #F8FAFC; border-bottom: 1px solid #E2E8F0; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+        <div style="position: relative; width: 260px;">
+          <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--slate-light); font-size: 12px;"></i>
+          <input type="text" id="org-tree-search-input" onkeyup="filterOrgTree(this.value)" placeholder="Find a person..." style="width: 100%; padding: 7px 12px 7px 32px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 12px; outline: none; background: #ffffff;">
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-main" onclick="expandAllOrgNodes()" style="margin: 0; padding: 6px 14px; font-size: 11.5px; background: #ffffff; color: var(--otsi-navy); border: 1px solid #CBD5E1; width: auto; font-weight: 600; border-radius: 6px;">
+            Expand all
+          </button>
+          <button class="btn-main" onclick="collapseAllOrgNodes()" style="margin: 0; padding: 6px 14px; font-size: 11.5px; background: #ffffff; color: var(--otsi-navy); border: 1px solid #CBD5E1; width: auto; font-weight: 600; border-radius: 6px;">
+            Collapse all
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body Canvas -->
+      <div class="modal-body" style="flex: 1; overflow: auto; padding: 30px; background: #F1F5F9; display: flex; justify-content: center; align-items: flex-start;">
+        <div class="org-tree" id="modal-org-tree-root">
+          <!-- Dynamically populated Org Chart -->
         </div>
       </div>
     </div>
@@ -6080,7 +6638,7 @@
       <div class="modal-footer">
         <button class="modal-btn secondary"
           onclick="document.getElementById('reset-expired-modal').classList.remove('open')">Cancel</button>
-        <button class="modal-btn primary" onclick="submitExpiredPasswordReset()">Reset Password & Log In</button>
+        <button class="modal-btn primary" onclick="submitExpiredPasswordReset()">Reset Password</button>
       </div>
     </div>
   </div>
@@ -6999,7 +7557,7 @@
       }
 
       try {
-        const data = await apiFetch('/auth/reset-expired-password', {
+        await apiFetch('/auth/reset-expired-password', {
           method: 'POST',
           body: JSON.stringify({
             employee_id: tempResetEmpId,
@@ -7010,22 +7568,18 @@
         });
 
         document.getElementById('reset-expired-modal').classList.remove('open');
-        saveSession(data);
+        document.getElementById('expired-pass').value = '';
+        document.getElementById('expired-pass-confirm').value = '';
 
-        const profile = await apiFetch('/profile');
-        currentProfile = profile;
-        currentRole = profile.role;
-        loginName = profile.full_name;
-        loginEmpId = profile.employee_id;
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        document.body.classList.remove('auth-mode');
-        initApp();
-        await loadTodayAttendance();
-        loadAttendanceStats();
-        loadRecentAttendance();
-        checkLocation();
-        toast('Password reset successful. Welcome, ' + loginName + '!', 'success');
+        toast('Password reset successfully! Please log in with your new password.', 'success');
+
+        switchAuthTab('login');
+        if (tempResetEmpId) {
+          document.getElementById('login-id').value = tempResetEmpId;
+        }
+        document.getElementById('login-pass').value = '';
+        const passInput = document.getElementById('login-pass');
+        if (passInput) passInput.focus();
       } catch (err) {
         toast(err.message, 'error');
       }
@@ -7800,6 +8354,16 @@
 
       const secEl = document.getElementById('hr-section-' + tabId);
       if (secEl) secEl.style.display = 'block';
+
+      if (tabId === 'corrections') {
+        loadAttendanceCorrections();
+      } else if (tabId === 'approvals') {
+        apiFetch('/admin/leave-approvals').then(data => {
+          if (data && data.leave_applications) {
+            renderLeaveApprovals(data.leave_applications);
+          }
+        }).catch(e => console.error(e));
+      }
     }
 
 
@@ -7837,10 +8401,7 @@
         if (document.getElementById('p-email')) document.getElementById('p-email').textContent = currentProfile.email || 'N/A';
         if (document.getElementById('p-dept')) document.getElementById('p-dept').textContent = currentProfile.department || 'N/A';
         if (document.getElementById('p-mgr')) document.getElementById('p-mgr').textContent = currentProfile.manager_name || 'N/A';
-        if (document.getElementById('org-tree-mgr-name')) document.getElementById('org-tree-mgr-name').textContent = currentProfile.manager_name || 'Kiran Mullapudi';
-        if (document.getElementById('org-tree-user-name')) document.getElementById('org-tree-user-name').textContent = `${loginName} (You)`;
-        if (document.getElementById('org-tree-user-role')) document.getElementById('org-tree-user-role').textContent = `${currentProfile.designation || 'Software Engineer'} · ${loginEmpId}`;
-        if (document.getElementById('org-tree-user-initials')) document.getElementById('org-tree-user-initials').textContent = loginName.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase();
+        loadDynamicOrgTree('team');
         if (document.getElementById('p-joining')) {
           if (currentProfile.date_of_joining) {
             const d = new Date(currentProfile.date_of_joining);
@@ -8182,6 +8743,14 @@
         }
       } catch (e) {
         console.error('Failed to load holidays:', e);
+        const tbodyIndia = document.getElementById('holiday-list-india');
+        const tbodyUs = document.getElementById('holiday-list-us');
+        if (tbodyIndia) {
+          tbodyIndia.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#EF4444;padding:15px;"><i class="fas fa-exclamation-circle" style="margin-right:6px;"></i>Unable to retrieve holidays from database. Please ensure the holidays table is initialized in Supabase.</td></tr>';
+        }
+        if (tbodyUs) {
+          tbodyUs.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#EF4444;padding:15px;"><i class="fas fa-exclamation-circle" style="margin-right:6px;"></i>Unable to retrieve holidays from database.</td></tr>';
+        }
       }
     }
 
@@ -9423,40 +9992,26 @@
       }
     }
 
-    // ─── HR/ADMIN DASHBOARD DYNAMIC BINDINGS ───
-    async function loadHrDashboard() {
-      try {
-        const stats = await apiFetch('/admin/dashboard-stats');
-        document.getElementById('hr-present-today').textContent = stats.present_today || 0;
-        document.getElementById('hr-leave-today').textContent = stats.leave_today || 0;
-        document.getElementById('hr-wfh-today').textContent = stats.wfh_today || 0;
-        document.getElementById('hr-leave-pending').textContent = stats.pending_leaves || 0;
-        document.getElementById('hr-live-present').textContent = stats.live_present_today || 0;
-        document.getElementById('hr-active-employees').textContent = stats.active_employees || 0;
-        document.getElementById('hr-inactive-employees').textContent = stats.inactive_employees || 0;
-        document.getElementById('hr-pending-registrations').textContent = stats.pending_registrations || 0;
-        document.getElementById('hr-halfday-today').textContent = stats.half_day_today || 0;
-        document.getElementById('hr-corrections-pending').textContent = stats.pending_attendance_corrections || 0;
-
-        const approvalsData = await apiFetch('/admin/leave-approvals');
-        const apps = approvalsData.leave_applications || [];
-        const pendingList = document.getElementById('hr-pending-leaves-list');
-        pendingList.innerHTML = '';
-        if (apps.length === 0) {
-          pendingList.innerHTML = '<div style="padding:15px;text-align:center;color:var(--slate-light)">No pending approvals.</div>';
-        } else {
-          apps.forEach(app => {
-            const item = document.createElement('div');
-            item.className = 'emp-list-item';
-            item.id = 'leave-req-' + app.id;
-            const avatar = app.employee_name ? app.employee_name.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase() : app.employee_id.slice(-2);
-            const start = new Date(app.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-            const end = new Date(app.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-            item.innerHTML = `
+    function renderLeaveApprovals(apps) {
+      const pendingList = document.getElementById('hr-pending-leaves-list');
+      if (!pendingList) return;
+      pendingList.innerHTML = '';
+      if (!apps || apps.length === 0) {
+        pendingList.innerHTML = '<div style="padding:15px;text-align:center;color:var(--slate-light)">No pending approvals.</div>';
+        return;
+      }
+      apps.forEach(app => {
+        const item = document.createElement('div');
+        item.className = 'emp-list-item';
+        item.id = 'leave-req-' + app.id;
+        const avatar = app.employee_name ? app.employee_name.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase() : app.employee_id.slice(-2);
+        const start = new Date(app.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        const end = new Date(app.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        item.innerHTML = `
           <div class="emp-avatar">${avatar}</div>
           <div style="flex:1">
             <div class="emp-name">${app.employee_name || 'Unknown'} <span style="color:var(--slate-light); font-size:12px;">(${app.employee_id})</span></div>
-            <div class="emp-meta">${app.leave_type.toUpperCase()} Leave · ${start} – ${end} · ${app.number_of_days} days</div>
+            <div class="emp-meta">${(app.leave_type || '').toUpperCase()} Leave · ${start} – ${end} · ${app.number_of_days} days</div>
             <div class="emp-meta" style="margin-top:2px;font-style:italic">Reason: ${app.reason || 'None'}</div>
             <div class="approve-row">
               <button class="btn-approve" onclick="hrActionLeave(${app.id}, 'approve')">Approve</button>
@@ -9464,9 +10019,37 @@
             </div>
           </div>
         `;
-            pendingList.appendChild(item);
-          });
+        pendingList.appendChild(item);
+      });
+    }
+
+    // ─── HR/ADMIN DASHBOARD DYNAMIC BINDINGS ───
+    async function loadHrDashboard() {
+      try {
+        // Fire corrections in parallel immediately
+        loadAttendanceCorrections();
+
+        // Fetch stats and leave approvals in parallel for instant render (<300ms)
+        const [stats, approvalsData] = await Promise.all([
+          apiFetch('/admin/dashboard-stats').catch(() => ({})),
+          apiFetch('/admin/leave-approvals').catch(() => ({}))
+        ]);
+
+        if (stats) {
+          if (document.getElementById('hr-present-today')) document.getElementById('hr-present-today').textContent = stats.present_today || 0;
+          if (document.getElementById('hr-leave-today')) document.getElementById('hr-leave-today').textContent = stats.leave_today || 0;
+          if (document.getElementById('hr-wfh-today')) document.getElementById('hr-wfh-today').textContent = stats.wfh_today || 0;
+          if (document.getElementById('hr-leave-pending')) document.getElementById('hr-leave-pending').textContent = stats.pending_leaves || 0;
+          if (document.getElementById('hr-live-present')) document.getElementById('hr-live-present').textContent = stats.live_present_today || 0;
+          if (document.getElementById('hr-active-employees')) document.getElementById('hr-active-employees').textContent = stats.active_employees || 0;
+          if (document.getElementById('hr-inactive-employees')) document.getElementById('hr-inactive-employees').textContent = stats.inactive_employees || 0;
+          if (document.getElementById('hr-pending-registrations')) document.getElementById('hr-pending-registrations').textContent = stats.pending_registrations || 0;
+          if (document.getElementById('hr-halfday-today')) document.getElementById('hr-halfday-today').textContent = stats.half_day_today || 0;
+          if (document.getElementById('hr-corrections-pending')) document.getElementById('hr-corrections-pending').textContent = stats.pending_attendance_corrections || 0;
         }
+
+        // Render leave approvals immediately
+        renderLeaveApprovals(approvalsData ? approvalsData.leave_applications || [] : []);
 
         const empData = await apiFetch('/admin/employees');
         const employees = empData.employees || [];
@@ -9559,10 +10142,10 @@
         if (regularCount === 0) {
           empList.innerHTML = '<div style="padding:15px;text-align:center;color:var(--slate-light)">No employee records.</div>';
         }
-
-        await loadOrgOverview();
-        await loadTeamAttendance();
-        await loadAttendanceCorrections();
+        await Promise.all([
+          loadOrgOverview().catch(() => {}),
+          loadTeamAttendance().catch(() => {})
+        ]);
       } catch (err) {
         console.error('Failed to load HR Dashboard', err);
       }
@@ -9641,6 +10224,7 @@
             });
             toast('Employee status updated successfully.', 'success');
             loadHrDashboard();
+            loadDynamicOrgTree();
           } catch (err) {
             toast(err.message, 'error');
           }
@@ -9897,6 +10481,7 @@
         loadAttendanceStats();
         loadRecentAttendance();
         checkLocation();
+        loadDynamicOrgTree();
       } catch (err) {
         clearSession();
       }
@@ -10073,8 +10658,345 @@
       }
     }
 
+    // ─── REPORTING & ORG HIERARCHY DYNAMIC TREE LOGIC ───
+    let currentOrgView = 'chain';
+    let dynamicOrgTreeData = [];
+    let dynamicOrgTreeDataAll = [];
+
+    // Base OTSi Portal Hierarchy Model
+    const fallbackOrgTreeData = [
+      {
+        id: 'node-cm',
+        name: 'Chandra Mullapudi',
+        initials: 'VP',
+        role: 'President & Global Delivery Head',
+        color: '#E0F2FE',
+        textColor: '#0284C7',
+        children: [
+          {
+            id: 'node-km',
+            name: 'Kiran Mullapudi',
+            initials: 'KM',
+            role: 'Delivery Manager · Direct Lead',
+            color: '#DCFCE7',
+            textColor: '#16A34A',
+            children: [
+              { id: 'node-ravi', name: 'Ravi Mallem (You)', initials: 'RM', role: 'Software Engineer · EMP5831', color: 'var(--otsi-blue)', textColor: '#ffffff', isMe: true },
+              { id: 'node-nitin', name: 'Nitin Gupta', initials: 'NG', role: 'Sr. Software Engineer · QA', color: '#F1F5F9', textColor: '#475569' },
+              { id: 'node-vikram', name: 'Vikram Singh', initials: 'VS', role: 'Tech Lead · Backend', color: '#F1F5F9', textColor: '#475569' },
+              { id: 'node-rahul', name: 'Rahul Mehta', initials: 'RM', role: 'DevOps Engineer · Cloud', color: '#F1F5F9', textColor: '#475569' }
+            ]
+          },
+          {
+            id: 'node-swati',
+            name: 'Swati Sharma',
+            initials: 'SS',
+            role: 'HR Manager · Operations',
+            color: '#FEF3C7',
+            textColor: '#D97706',
+            children: [
+              { id: 'node-ankit', name: 'Ankit Verma', initials: 'AV', role: 'Project Manager · Ops', color: '#F1F5F9', textColor: '#475569' },
+              { id: 'node-priya', name: 'Priya Patel', initials: 'PP', role: 'UI/UX Lead · Design', color: '#F1F5F9', textColor: '#475569' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    async function loadDynamicOrgTree(scope = 'team', targetEmpId = null) {
+      try {
+        const empId = targetEmpId || loginEmpId;
+        let treeRoots = [];
+        let chainList = [];
+
+        // 1. Fetch dynamic tree & reporting chain from backend API endpoint /api/org-tree
+        try {
+          const res = await apiFetch(`/org-tree?scope=${scope}&emp_id=${empId}`);
+          if (res) {
+            if (res.tree && res.tree.length > 0) treeRoots = res.tree;
+            if (res.chain && res.chain.length > 0) chainList = res.chain;
+          }
+        } catch (apiErr) {
+          console.warn('API /org-tree endpoint error, building tree dynamically from employee data...', apiErr);
+        }
+
+        // 2. If API tree or chain is empty, build dynamic hierarchy from window.allEmployees
+        if ((treeRoots.length === 0 || chainList.length === 0) && window.allEmployees && window.allEmployees.length > 0) {
+          const activeEmps = window.allEmployees.filter(e => e.status === 'active');
+          const empMap = {};
+
+          activeEmps.forEach(emp => {
+            const initials = emp.full_name ? emp.full_name.split(' ').map(x => x[0]).join('').slice(0, 2).toUpperCase() : 'EM';
+            const isMe = emp.employee_id === empId;
+            empMap[emp.employee_id] = {
+              id: `node-${emp.employee_id.toLowerCase()}`,
+              employee_id: emp.employee_id,
+              name: isMe ? `${emp.full_name} (You)` : emp.full_name,
+              initials: initials,
+              role: emp.designation || (emp.role ? emp.role.toUpperCase() : 'Employee'),
+              department: emp.department || 'Engineering',
+              manager_id: emp.manager_id,
+              raw_role: emp.role || 'employee',
+              isMe: isMe,
+              color: isMe ? 'var(--otsi-blue)' : (emp.role === 'admin' ? '#E0F2FE' : emp.role === 'hr' ? '#FEF3C7' : '#F1F5F9'),
+              textColor: isMe ? '#ffffff' : (emp.role === 'admin' ? '#0284C7' : emp.role === 'hr' ? '#D97706' : '#475569'),
+              children: []
+            };
+          });
+
+          // Connect child nodes to parent manager nodes dynamically
+          if (treeRoots.length === 0) {
+            Object.values(empMap).forEach(node => {
+              if (node.manager_id && empMap[node.manager_id] && node.manager_id !== node.employee_id) {
+                empMap[node.manager_id].children.push(node);
+              } else {
+                treeRoots.push(node);
+              }
+            });
+          }
+
+          // Build chainList dynamically if empty
+          if (chainList.length === 0 && empMap[empId]) {
+            let curr = empMap[empId];
+            const visited = new Set();
+            while (curr && !visited.has(curr.employee_id)) {
+              visited.add(curr.employee_id);
+              chainList.unshift({
+                employee_id: curr.employee_id,
+                name: curr.name,
+                initials: curr.initials,
+                role: curr.role,
+                department: curr.department,
+                raw_role: curr.raw_role,
+                isMe: curr.employee_id === empId
+              });
+              if (curr.manager_id && empMap[curr.manager_id] && curr.manager_id !== curr.employee_id) {
+                curr = empMap[curr.manager_id];
+              } else {
+                break;
+              }
+            }
+          }
+        }
+
+        // 3. Fallback if still empty
+        if (treeRoots.length === 0) {
+          treeRoots = fallbackOrgTreeData;
+        }
+
+        markActiveUserInTree(treeRoots, empId);
+
+        if (scope === 'all') {
+          dynamicOrgTreeDataAll = treeRoots;
+        } else {
+          dynamicOrgTreeData = treeRoots;
+        }
+
+        renderOrgTreeRoot('card-org-tree-root', dynamicOrgTreeData);
+        if (document.getElementById('org-tree-modal')?.classList.contains('open')) {
+          renderOrgTreeRoot('modal-org-tree-root', dynamicOrgTreeDataAll.length > 0 ? dynamicOrgTreeDataAll : dynamicOrgTreeData);
+        }
+        if (chainList.length > 0) renderChainView(chainList);
+      } catch (err) {
+        console.error('Failed to load dynamic org tree:', err);
+      }
+    }
+
+    function renderChainView(chain) {
+      const container = document.getElementById('org-view-chain');
+      if (!container) return;
+
+      let html = '<div class="org-chain-rail"></div>';
+      const total = chain.length;
+
+      chain.forEach((item, idx) => {
+        const isMe = item.isMe || item.employee_id === loginEmpId;
+        const activeClass = isMe ? ' active-user' : '';
+        
+        let tagLabel = 'Manager';
+        let tagStyle = 'background:#DCFCE7; color:#166534;';
+        let avatarBg = 'background:#DCFCE7; color:#16A34A;';
+
+        if (isMe) {
+          tagLabel = 'Active (You)';
+          tagStyle = 'background:#04466C; color:#ffffff;';
+          avatarBg = 'background:var(--otsi-blue); color:#ffffff;';
+        } else if (idx === 0) {
+          tagLabel = item.raw_role === 'admin' ? 'Executive' : (total > 2 ? 'Executive' : 'Lead Manager');
+          tagStyle = 'background:#F1F5F9; color:var(--slate);';
+          avatarBg = 'background:#E0F2FE; color:var(--otsi-blue);';
+        } else if (idx < total - 1) {
+          tagLabel = 'Reporting Lead';
+          tagStyle = 'background:#E0F2FE; color:#0369A1;';
+          avatarBg = 'background:#DCFCE7; color:#16A34A;';
+        }
+
+        html += `
+          <div class="org-chain-item${activeClass}">
+            <div class="org-chain-avatar" style="${avatarBg}">${item.initials}</div>
+            <div style="flex:1;">
+              <div style="font-size:12px; font-weight:700; color:var(--otsi-navy);">${item.name}</div>
+              <div style="font-size:10.5px; color:var(--slate);">${item.role} · ${item.department}</div>
+            </div>
+            <span style="font-size:10px; font-weight:700; ${tagStyle} padding:2px 6px; border-radius:4px;">${tagLabel}</span>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function markActiveUserInTree(nodes, activeId = null) {
+      if (!nodes) return;
+      const targetId = activeId || loginEmpId;
+      nodes.forEach(node => {
+        if (node.employee_id === targetId) {
+          node.isMe = true;
+          if (node.name && !node.name.includes('(You)')) node.name += ' (You)';
+        } else {
+          node.isMe = false;
+          if (node.name) node.name = node.name.replace(' (You)', '');
+        }
+        if (node.children) markActiveUserInTree(node.children, targetId);
+      });
+    }
+
+    function switchOrgView(viewType) {
+      currentOrgView = viewType;
+      const chainEl = document.getElementById('org-view-chain');
+      const treeEl = document.getElementById('org-view-tree');
+      const btnChain = document.getElementById('btn-org-chain');
+      const btnTree = document.getElementById('btn-org-tree');
+
+      if (viewType === 'chain') {
+        if (chainEl) chainEl.style.display = 'flex';
+        if (treeEl) treeEl.style.display = 'none';
+        if (btnChain) btnChain.classList.add('active');
+        if (btnTree) btnTree.classList.remove('active');
+      } else {
+        if (chainEl) chainEl.style.display = 'none';
+        if (treeEl) treeEl.style.display = 'block';
+        if (btnChain) btnChain.classList.remove('active');
+        if (btnTree) btnTree.classList.add('active');
+        loadDynamicOrgTree('team');
+      }
+    }
+
+    function renderOrgTreeNode(node) {
+      const hasChildren = node.children && node.children.length > 0;
+      const meClass = node.isMe ? ' me' : '';
+      const avatarBg = node.isMe ? 'background:var(--otsi-blue); color:#fff;' : `background:${node.color || '#F1F5F9'}; color:${node.textColor || '#475569'};`;
+
+      let childrenHtml = '';
+      if (hasChildren) {
+        childrenHtml = '<ul>' + node.children.map(child => renderOrgTreeNode(child)).join('') + '</ul>';
+      }
+
+      const toggleBadge = hasChildren ? `<div class="org-node-badge" onclick="toggleOrgNode(this, event)">- ${node.children.length}</div>` : '';
+
+      return `
+        <li id="${node.id}">
+          <div class="org-tree-node${meClass}">
+            <div class="org-node-avatar" style="${avatarBg}">${node.initials}</div>
+            <div class="org-node-name">${node.name}</div>
+            <div class="org-node-role">${node.role}</div>
+            ${toggleBadge}
+          </div>
+          ${childrenHtml}
+        </li>
+      `;
+    }
+
+    function renderOrgTreeRoot(containerId, customData = null) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const dataToRender = (customData && customData.length > 0) ? customData : ((dynamicOrgTreeData && dynamicOrgTreeData.length > 0) ? dynamicOrgTreeData : fallbackOrgTreeData);
+      const html = '<ul>' + dataToRender.map(node => renderOrgTreeNode(node)).join('') + '</ul>';
+      container.innerHTML = html;
+    }
+
+    function toggleOrgNode(badgeEl, evt) {
+      if (evt) evt.stopPropagation();
+      const li = badgeEl.closest('li');
+      if (!li) return;
+
+      const count = li.querySelectorAll(':scope > ul > li').length;
+      if (li.classList.contains('org-tree-collapsed')) {
+        li.classList.remove('org-tree-collapsed');
+        badgeEl.textContent = `- ${count}`;
+      } else {
+        li.classList.add('org-tree-collapsed');
+        badgeEl.textContent = `+ ${count}`;
+      }
+    }
+
+    async function openOrgTreeModal() {
+      const modal = document.getElementById('org-tree-modal');
+      if (modal) {
+        modal.classList.add('open');
+        const searchInput = document.getElementById('org-tree-search-input');
+        if (searchInput) searchInput.value = '';
+        renderOrgTreeRoot('modal-org-tree-root', dynamicOrgTreeDataAll.length > 0 ? dynamicOrgTreeDataAll : dynamicOrgTreeData);
+        await loadDynamicOrgTree('all');
+        renderOrgTreeRoot('modal-org-tree-root', dynamicOrgTreeDataAll.length > 0 ? dynamicOrgTreeDataAll : dynamicOrgTreeData);
+      }
+    }
+
+    function closeOrgTreeModal() {
+      const modal = document.getElementById('org-tree-modal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function expandAllOrgNodes() {
+      document.querySelectorAll('#modal-org-tree-root li').forEach(li => {
+        li.classList.remove('org-tree-collapsed');
+        const badge = li.querySelector('.org-node-badge');
+        if (badge) {
+          const count = li.querySelectorAll(':scope > ul > li').length;
+          if (count > 0) badge.textContent = `- ${count}`;
+        }
+      });
+    }
+
+    function collapseAllOrgNodes() {
+      document.querySelectorAll('#modal-org-tree-root li').forEach(li => {
+        const hasSubUl = li.querySelector(':scope > ul');
+        if (hasSubUl) {
+          li.classList.add('org-tree-collapsed');
+          const badge = li.querySelector('.org-node-badge');
+          const count = li.querySelectorAll(':scope > ul > li').length;
+          if (badge && count > 0) badge.textContent = `+ ${count}`;
+        }
+      });
+    }
+
+    function filterOrgTree(query) {
+      const q = (query || '').toLowerCase().trim();
+      const nodes = document.querySelectorAll('#modal-org-tree-root .org-tree-node');
+
+      nodes.forEach(node => {
+        const text = node.textContent.toLowerCase();
+        if (q && text.includes(q)) {
+          node.classList.add('highlight');
+          let pLi = node.closest('li');
+          while (pLi) {
+            pLi.classList.remove('org-tree-collapsed');
+            const badge = pLi.querySelector('.org-node-badge');
+            if (badge) {
+              const count = pLi.querySelectorAll(':scope > ul > li').length;
+              if (count > 0) badge.textContent = `- ${count}`;
+            }
+            pLi = pLi.parentElement ? pLi.parentElement.closest('li') : null;
+          }
+        } else {
+          node.classList.remove('highlight');
+        }
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       fetchWeather();
+      loadDynamicOrgTree();
       const urlParams = new URLSearchParams(window.location.search);
       const rToken = urlParams.get('reset_token');
       const rEmpId = urlParams.get('emp_id');

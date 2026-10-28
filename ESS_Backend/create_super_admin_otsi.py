@@ -40,7 +40,9 @@ def get_supabase_client() -> Client:
     supabase_key = os.getenv('SUPABASE_KEY')
     if not supabase_url or not supabase_key:
         raise ValueError('SUPABASE_URL and SUPABASE_KEY must be set in the environment')
-    return create_client(supabase_url, supabase_key)
+    schema = os.getenv('SUPABASE_SCHEMA', 'public').strip() or 'public'
+    from supabase.lib.client_options import ClientOptions
+    return create_client(supabase_url, supabase_key, options=ClientOptions(schema=schema))
 
 
 

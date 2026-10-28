@@ -1686,14 +1686,19 @@ def create_ticket():
         
         ticket = SupabaseDB.insert('support_tickets', ticket_data)
         
-        # Create notification for IT team
-        NotificationUtils.create_notification(
-            'ADMIN001',
-            'New Support Ticket',
-            f'New {data["priority"]} ticket: {data["subject"]}',
-            'ticket_alert',
-            action_url='hd'
-        )
+        # Create notification for IT team / Admin
+        try:
+            admin_users = SupabaseDB.select('employees', 'employee_id', {'role': 'admin'})
+            notify_target = admin_users[0]['employee_id'] if admin_users else 'EMP1000'
+            NotificationUtils.create_notification(
+                notify_target,
+                'New Support Ticket',
+                f'New {data["priority"]} ticket: {data["subject"]}',
+                'ticket_alert',
+                action_url='hd'
+            )
+        except Exception as notif_err:
+            logger.error(f"Ticket notification warning: {notif_err}")
         
         log_audit(employee_id, 'CREATE_TICKET', 'support_tickets',
                  new_values=ticket_data)
@@ -1807,6 +1812,98 @@ def update_profile():
         return jsonify({'error': 'Failed to update profile'}), 500
 
 
+@app.route('/api/org-tree', methods=['GET'])
+@token_required
+def get_org_tree():
+    """Build and return dynamic multi-level org hierarchy tree with Team/Department Scoping"""
+    try:
+        req_emp_id = (request.args.get('emp_id') or '').strip().upper()
+        target_emp_id = req_emp_id if req_emp_id else g.current_employee_id
+        
+        target_emp = SupabaseDB.select_one('employees', {'employee_id': target_emp_id})
+        scope = (request.args.get('scope') or 'team').strip().lower()
+
+        employees = SupabaseDB.select('employees', '*')
+        active_emps = [e for e in employees if classify_employee_record(e) == 'active']
+        
+        # Build map of employee_id -> node object
+        emp_map = {}
+        for emp in active_emps:
+            emp_id = emp['employee_id']
+            name_parts = (emp.get('full_name') or '').split()
+            initials = ''.join([part[0] for part in name_parts if part]).upper()[:2] or 'EM'
+            emp_map[emp_id] = {
+                'id': f"node-{emp_id.lower()}",
+                'employee_id': emp_id,
+                'name': emp.get('full_name') or emp_id,
+                'initials': initials,
+                'role': emp.get('designation') or emp.get('role', '').upper() or 'Employee',
+                'department': emp.get('department') or 'Engineering',
+                'manager_id': emp.get('manager_id'),
+                'raw_role': emp.get('role', 'employee'),
+                'children': []
+            }
+
+        # Connect children to parent managers dynamically
+        full_roots = []
+        for emp_id, node in emp_map.items():
+            mgr_id = node.get('manager_id')
+            if mgr_id and mgr_id in emp_map and mgr_id != emp_id:
+                emp_map[mgr_id]['children'].append(node)
+            else:
+                full_roots.append(node)
+
+        # Build personal reporting chain for target employee (Top Exec -> Manager -> Target Employee)
+        chain = []
+        curr = emp_map.get(target_emp_id)
+        visited = set()
+        while curr and curr['employee_id'] not in visited:
+            visited.add(curr['employee_id'])
+            chain.insert(0, {
+                'employee_id': curr['employee_id'],
+                'name': curr['name'],
+                'initials': curr['initials'],
+                'role': curr['role'],
+                'department': curr['department'],
+                'raw_role': curr.get('raw_role', 'employee'),
+                'isMe': curr['employee_id'] == target_emp_id
+            })
+            mgr_id = curr.get('manager_id')
+            if mgr_id and mgr_id in emp_map and mgr_id != curr['employee_id']:
+                curr = emp_map[mgr_id]
+            else:
+                break
+
+        # Team Scoped Tree vs Company Tree
+        if scope == 'team' and target_emp:
+            # Find the root node of the target employee's hierarchy branch
+            root_node = emp_map.get(target_emp_id)
+            if root_node:
+                p_id = root_node.get('manager_id')
+                p_visited = set([root_node['employee_id']])
+                while p_id and p_id in emp_map and p_id not in p_visited:
+                    p_visited.add(p_id)
+                    root_node = emp_map[p_id]
+                    p_id = root_node.get('manager_id')
+                tree_output = [root_node]
+            else:
+                tree_output = full_roots
+        else:
+            tree_output = full_roots
+
+        return jsonify({
+            'tree': tree_output,
+            'chain': chain,
+            'scope': scope,
+            'target_employee_id': target_emp_id,
+            'total_active': len(active_emps)
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Get org tree error: {str(e)}")
+        return jsonify({'error': 'Failed to build dynamic org tree'}), 500
+
+
 # ═════════════════════════════════════════════════════════════
 # HR/ADMIN ENDPOINTS
 # ═════════════════════════════════════════════════════════════
@@ -1910,20 +2007,20 @@ def get_team_attendance():
         if not is_hr:
             attendance = [a for a in attendance if a['employee_id'] in report_ids]
             
-        # Fetch employee details
+        # Batch lookup all employees to avoid 257 individual queries
+        all_emps = {e['employee_id']: e for e in SupabaseDB.select('employees', '*')}
         result = []
         for att in attendance:
-            emp = SupabaseDB.select_one('employees', 
-                                        {'employee_id': att['employee_id']})
+            emp = all_emps.get(att['employee_id'])
             if emp:
                 result.append({
                     'employee_id': emp['employee_id'],
                     'name': emp['full_name'],
-                    'designation': emp['designation'],
-                    'status': att['status'],
-                    'check_in_time': att['check_in_time'],
-                    'check_out_time': att['check_out_time'],
-                    'is_wfh': att['is_wfh']
+                    'designation': emp.get('designation', 'Software Engineer'),
+                    'status': att.get('status', 'present'),
+                    'check_in_time': att.get('check_in_time'),
+                    'check_out_time': att.get('check_out_time'),
+                    'is_wfh': att.get('is_wfh', False)
                 })
         
         return jsonify({'team_attendance': result, 'count': len(result)}), 200
@@ -1953,12 +2050,14 @@ def get_leave_approvals():
                 all_pending = SupabaseDB.select('leave_applications', '*', {'status': 'pending'})
                 leave_apps = [app for app in all_pending if app['employee_id'] in report_ids]
 
-        for app in leave_apps:
-            applicant = SupabaseDB.select_one('employees', {'employee_id': app['employee_id']})
-            if applicant:
-                app['employee_name'] = applicant.get('full_name')
-                app['department'] = applicant.get('department')
-                app['designation'] = applicant.get('designation')
+        if leave_apps:
+            all_emps = {e['employee_id']: e for e in SupabaseDB.select('employees', '*')}
+            for app in leave_apps:
+                applicant = all_emps.get(app['employee_id'])
+                if applicant:
+                    app['employee_name'] = applicant.get('full_name')
+                    app['department'] = applicant.get('department')
+                    app['designation'] = applicant.get('designation')
 
         return jsonify({'leave_applications': leave_apps, 'count': len(leave_apps)}), 200
         
@@ -2482,40 +2581,40 @@ def update_ticket(ticket_id):
         data = request.get_json()
         employee_id = g.current_employee_id
         emp = SupabaseDB.select_one('employees', {'employee_id': employee_id})
-        if not emp or (emp['role'] != 'admin' and emp.get('team') != 'SNA'):
+        if not emp or (emp['role'] not in ['admin', 'hr'] and emp.get('team') != 'SNA'):
             return jsonify({'error': 'Unauthorized'}), 403
             
         status = data.get('status')
-        response_text = data.get('response')
+        response_text = data.get('response') or data.get('resolution')
         
         ticket = SupabaseDB.select_one('support_tickets', {'id': ticket_id})
         if not ticket:
             return jsonify({'error': 'Ticket not found'}), 404
             
         update_data = {'updated_at': datetime.now(timezone.utc).isoformat()}
-        if status: update_data['status'] = status
+        if status:
+            update_data['status'] = status
+            if status in ['resolved', 'closed']:
+                update_data['resolved_date'] = datetime.now(timezone.utc).isoformat()
         if response_text: 
-            responses = ticket.get('responses', [])
-            responses.append({
-                'responder': emp['full_name'],
-                'text': response_text,
-                'timestamp': datetime.now(timezone.utc).isoformat()
-            })
-            update_data['responses'] = responses
+            update_data['resolution'] = response_text
             
         SupabaseDB.update('support_tickets', {'id': ticket_id}, update_data)
         
         # Notify the ticket creator
-        if status or response_text:
-            msg = f"Your ticket '{ticket['subject']}' was updated."
-            if status: msg += f" Status changed to {status}."
-            NotificationUtils.create_notification(
-                ticket['employee_id'],
-                'Ticket Update',
-                msg,
-                'ticket_update',
-                action_url='hd'
-            )
+        try:
+            if status or response_text:
+                msg = f"Your ticket '{ticket['subject']}' was updated."
+                if status: msg += f" Status changed to {status}."
+                NotificationUtils.create_notification(
+                    ticket['employee_id'],
+                    'Ticket Update',
+                    msg,
+                    'ticket_update',
+                    action_url='hd'
+                )
+        except Exception as notif_err:
+            logger.error(f"Ticket update notification warning: {notif_err}")
             
         return jsonify({'message': 'Ticket updated successfully'}), 200
     except Exception as e:
@@ -2723,8 +2822,11 @@ def request_attendance_correction():
         return jsonify({'message': 'Correction request submitted successfully'}), 201
         
     except Exception as e:
-        logger.error(f"Request attendance correction error: {str(e)}")
-        return jsonify({'error': 'Failed to submit correction request'}), 500
+        err_str = str(e)
+        logger.error(f"Request attendance correction error: {err_str}")
+        if '42501' in err_str or 'row-level security' in err_str.lower():
+            return jsonify({'error': 'Database permission denied: Please disable Row Level Security (RLS) on attendance_correction_requests table in Supabase.'}), 500
+        return jsonify({'error': f'Failed to submit correction request: {err_str}'}), 500
 
 
 @app.route('/api/attendance/correction/history', methods=['GET'])
@@ -2768,11 +2870,13 @@ def get_attendance_corrections():
         if not is_hr:
             reqs = [r for r in reqs if r['employee_id'] in report_ids]
         
-        for r in reqs:
-            emp = SupabaseDB.select_one('employees', {'employee_id': r['employee_id']})
-            if emp:
-                r['employee_name'] = emp['full_name']
-                r['department'] = emp.get('department')
+        if reqs:
+            all_emps = {e['employee_id']: e for e in SupabaseDB.select('employees', '*')}
+            for r in reqs:
+                emp = all_emps.get(r['employee_id'])
+                if emp:
+                    r['employee_name'] = emp['full_name']
+                    r['department'] = emp.get('department')
                 
         return jsonify({'corrections': reqs, 'count': len(reqs)}), 200
     except Exception as e:
@@ -2954,17 +3058,47 @@ def reject_attendance_correction(req_id):
 # HOLIDAYS ENDPOINTS
 # ═════════════════════════════════════════════════════════════
 
+OFFICIAL_FALLBACK_HOLIDAYS_2026 = [
+    # 1. OTSI INDIA OFFICIAL HOLIDAYS 2026 (14 Days)
+    {"id": 1, "holiday_date": "2026-01-01", "occasion": "New Year Day", "remark": "All Locations", "region": "India"},
+    {"id": 2, "holiday_date": "2026-01-14", "occasion": "Sankranti / Pongal", "remark": "All Locations excluding Bangalore", "region": "India"},
+    {"id": 3, "holiday_date": "2026-01-15", "occasion": "Makara Sankranti", "remark": "Only Bangalore", "region": "India"},
+    {"id": 4, "holiday_date": "2026-01-26", "occasion": "Republic Day", "remark": "All Locations", "region": "India"},
+    {"id": 5, "holiday_date": "2026-03-03", "occasion": "Holi", "remark": "Only Delhi", "region": "India"},
+    {"id": 6, "holiday_date": "2026-03-19", "occasion": "Ugadi", "remark": "All Locations excluding Delhi", "region": "India"},
+    {"id": 7, "holiday_date": "2026-05-01", "occasion": "Budha Purnima / May Day", "remark": "All Locations excluding Bangalore", "region": "India"},
+    {"id": 8, "holiday_date": "2026-05-27", "occasion": "Eidul Azha (Bakrid)", "remark": "All Locations", "region": "India"},
+    {"id": 9, "holiday_date": "2026-09-14", "occasion": "Vinayaka Chavithi", "remark": "All Locations", "region": "India"},
+    {"id": 10, "holiday_date": "2026-10-02", "occasion": "Mahatma Gandhi Jayanthi", "remark": "All Locations", "region": "India"},
+    {"id": 11, "holiday_date": "2026-10-20", "occasion": "Vijaya Dasami (Dussehra)", "remark": "All Locations excluding Bangalore", "region": "India"},
+    {"id": 12, "holiday_date": "2026-10-21", "occasion": "Following Day of Vijaya Dasami", "remark": "Only Bangalore", "region": "India"},
+    {"id": 13, "holiday_date": "2026-11-10", "occasion": "Balipadyami", "remark": "Only Bangalore", "region": "India"},
+    {"id": 14, "holiday_date": "2026-12-25", "occasion": "Christmas", "remark": "All Locations", "region": "India"},
+    # 2. OTSI US OFFICIAL HOLIDAYS 2026 (9 Days)
+    {"id": 15, "holiday_date": "2026-01-01", "occasion": "New Year's Day", "remark": "All US Locations", "region": "US"},
+    {"id": 16, "holiday_date": "2026-01-19", "occasion": "Martin Luther King Jr. Day", "remark": "All US Locations", "region": "US"},
+    {"id": 17, "holiday_date": "2026-05-25", "occasion": "Memorial Day", "remark": "All US Locations", "region": "US"},
+    {"id": 18, "holiday_date": "2026-06-19", "occasion": "Juneteenth National Independence Day", "remark": "All US Locations", "region": "US"},
+    {"id": 19, "holiday_date": "2026-07-03", "occasion": "Independence Day (Observed)", "remark": "All US Locations", "region": "US"},
+    {"id": 20, "holiday_date": "2026-09-07", "occasion": "Labor Day", "remark": "All US Locations", "region": "US"},
+    {"id": 21, "holiday_date": "2026-11-26", "occasion": "Thanksgiving Day", "remark": "All US Locations", "region": "US"},
+    {"id": 22, "holiday_date": "2026-11-27", "occasion": "Day After Thanksgiving", "remark": "All US Locations", "region": "US"},
+    {"id": 23, "holiday_date": "2026-12-25", "occasion": "Christmas Day", "remark": "All US Locations", "region": "US"}
+]
+
 @app.route('/api/holidays', methods=['GET'])
 @token_required
 def get_holidays():
-    """Get all company holidays"""
+    """Get all company holidays with database lookup and instant 2026 calendar fallback"""
     try:
         holidays = SupabaseDB.select('holidays')
-        holidays.sort(key=lambda x: x['holiday_date'])
-        return jsonify(holidays), 200
+        if holidays and len(holidays) > 0:
+            holidays.sort(key=lambda x: x['holiday_date'])
+            return jsonify(holidays), 200
     except Exception as e:
-        logger.error(f"Get holidays error: {str(e)}")
-        return jsonify({'error': 'Failed to fetch holidays'}), 500
+        logger.warning(f"Could not load holidays from Supabase table ({e}); serving official 2026 calendar fallback.")
+        
+    return jsonify(OFFICIAL_FALLBACK_HOLIDAYS_2026), 200
 
 @app.route('/api/holidays', methods=['POST'])
 @token_required

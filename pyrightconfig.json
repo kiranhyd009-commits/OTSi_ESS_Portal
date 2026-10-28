@@ -2,6 +2,7 @@
   "venvPath": "ESS_Backend",
   "venv": "venv",
   "extraPaths": [
-    "ESS_Backend"
+    "ESS_Backend",
+    "ESS_Backend/venv/Lib/site-packages"
   ]
 }

@@ -21,6 +21,7 @@ class Config:
     # Supabase Configuration
     SUPABASE_URL = os.getenv('SUPABASE_URL', 'https://your-project.supabase.co')
     SUPABASE_KEY = os.getenv('SUPABASE_KEY', 'your-supabase-key')
+    SUPABASE_SCHEMA = os.getenv('SUPABASE_SCHEMA', 'public')
     
     # CORS Configuration
     CORS_HEADERS = 'Content-Type'

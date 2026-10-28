@@ -1,0 +1,8 @@
+search-path = [
+    ".",
+    "venv/Lib/site-packages"
+]
+
+site-package-path = [
+    "venv/Lib/site-packages"
+]
